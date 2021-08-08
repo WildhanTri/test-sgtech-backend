@@ -39,6 +39,21 @@ class MoviesController {
             res.status(401).send(objectResponse("Gagal", movies));
         }
     }
+
+    async buyMovie(req: express.Request, res: express.Response) {
+        var movie_uuid = req.params.movie_uuid
+        var user_uuid = req.body.user.user_uuid
+
+        var checkMovieByUser = await moviesService.checkMovieByUser(movie_uuid, user_uuid)
+        console.log(checkMovieByUser + " <= aodkwoakdoaskodiwhjsoij")
+        if(checkMovieByUser){
+            res.status(500).send(objectResponse("Movie sudah pernah dibeli"));
+            return
+        }
+
+        await moviesService.buyMovie(movie_uuid, user_uuid)
+        res.status(200).send(objectResponse("Berhasil"));
+    }
 }
 
 export default MoviesController.getInstance();

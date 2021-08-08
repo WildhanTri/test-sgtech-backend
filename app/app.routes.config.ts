@@ -26,6 +26,8 @@ export class AppRoutes extends CommonRoutesConfig {
             .get(usersMiddleware.validateToken, moviesController.get)
         this.app.route(`/v1/movie/:movie_uuid`)
             .get(usersMiddleware.validateToken, moviesController.getDetail)
+        this.app.route(`/v1/movie/:movie_uuid/buy`)
+            .post(usersMiddleware.validateToken, moviesController.buyMovie)
 
         // USER MEMBERSHIP
         this.app.route(`/v1/membership/start`)

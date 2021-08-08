@@ -28,7 +28,7 @@ class MoviesDao {
 
         var ps = []
         var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE m.movie_uuid = ?"
-                
+
         ps.push(movie_uuid)
 
         const [rows, fields] = await connection.execute(sql, ps);
@@ -70,9 +70,7 @@ class MoviesDao {
             ps.push(`%${query}%`);
         }
 
-        console.log("Asdoawkdokwodk => ");
         const [rows, fields] = await connection.execute(sql, ps);
-        console.log("Asdoawkdokwodk => " + rows);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
         return data
     }
@@ -126,6 +124,35 @@ class MoviesDao {
         var ps = []
         var sql = "DELETE FROM movie WHERE movie_uuid = ? "
         ps.push(moive_uuid)
+
+        await connection.execute(sql, ps);
+        return
+    }
+
+    async checkMovieByUser(uuidMovie: string, uuidUser: string) {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+
+        var ps = []
+        var sql = "SELECT COUNT(*) as count FROM users u INNER JOIN users_libraries ul ON u.user_id = ul.user_library_user_id INNER JOIN movies m ON m.movie_id = ul.user_library_movie_id WHERE u.user_uuid = ? AND m.movie_uuid = ?"
+        ps.push(uuidUser)
+        ps.push(uuidMovie)
+        
+
+        const [rows, fields] = await connection.execute(sql, ps);
+        var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        return data
+    }
+
+    async buyMovie(uuidMovie: string, uuidUser: string) {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+
+        var ps = []
+        var sql = "INSERT INTO `test-sgtech-db`.`users_libraries`(`user_library_movie_id`, `user_library_user_id`,  `user_library_movie_price`) VALUES ((SELECT movie_id uuid FROM movies WHERE movie_uuid = ?), (SELECT user_id FROM users WHERE user_uuid = ?), (SELECT movie_price uuid FROM movies WHERE movie_uuid = ?)); "
+        ps.push(uuidMovie)
+        ps.push(uuidUser)
+        ps.push(uuidMovie)
 
         await connection.execute(sql, ps);
         return

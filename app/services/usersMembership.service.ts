@@ -33,7 +33,7 @@ class UsersMembershipService {
     async start(uuid_user: string) {
         await usersMembershipDao.updateMembershipStatus(uuid_user, true);
 
-        var countByDate: any = usersMembershipDao.countActiveMembershipByDate(uuid_user)
+        var countByDate: any = await usersMembershipDao.countActiveMembershipByDate(uuid_user)
         if (countByDate == 0) {
             await usersMembershipDao.insertMembership(uuid_user)
         }

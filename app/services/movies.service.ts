@@ -29,6 +29,16 @@ class MoviesService {
         return await moviesDao.getDetail(movie_uuid)
     }
 
+    async checkMovieByUser(movie_uuid: string, user_uuid: string) {
+        var count: any = await moviesDao.checkMovieByUser(movie_uuid, user_uuid)
+        console.log("awokwaokawokwa => "+count)
+        return count > 0
+    }
+
+    async buyMovie(movie_uuid: string, user_uuid: string) {
+        return await moviesDao.buyMovie(movie_uuid, user_uuid)
+    }
+
     async create(movie: MoviesDTO) {
         return await moviesDao.create(movie)
     }
@@ -36,7 +46,7 @@ class MoviesService {
     async update(movie: MoviesDTO) {
         return await moviesDao.update(movie)
     }
-    
+
     async updateThumbnail(movie: MoviesDTO) {
         return await moviesDao.update(movie)
     }
