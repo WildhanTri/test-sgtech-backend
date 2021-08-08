@@ -4,6 +4,7 @@ import usersController from './controllers/users.controller';
 import usersMiddleware from './middleware/users.middleware';
 import moviesController from './controllers/movies.controller';
 import usersMembershipController from './controllers/usersMembership.controller';
+import usersLibraryController from './controllers/usersLibrary.controller';
 
 export class AppRoutes extends CommonRoutesConfig {
     constructor(app: express.Application) {
@@ -34,6 +35,10 @@ export class AppRoutes extends CommonRoutesConfig {
             .post(usersMiddleware.validateToken, usersMembershipController.start)
         this.app.route(`/v1/membership/cancel`)
             .delete(usersMiddleware.validateToken, usersMembershipController.cancel)
+            
+        // USER LIBRARY
+        this.app.route(`/v1/library`)
+        .get(usersMiddleware.validateToken, usersLibraryController.get)
 
         return this.app;
     }

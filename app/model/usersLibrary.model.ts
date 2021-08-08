@@ -1,4 +1,4 @@
-export class UsersMembershipDto {
+export class UsersLibraryDto {
    user_library_id?: string
    user_library_movie_id?: string
    user_library_movie_uuid?: string
@@ -16,6 +16,6 @@ export class UsersMembershipDto {
    }
 
    static fromObject(obj: any) {
-      return new UsersMembershipDto(obj.user_library_user_uuid, obj.user_library_movie_uuid, obj.user_library_movie_price);
+      return new UsersLibraryDto(obj.user_library_user_uuid, obj.user_library_movie_uuid, obj.user_library_movie_price);
    }
 }
