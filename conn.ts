@@ -4,7 +4,7 @@ var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "root",
-    database: "libr-form"
+    database: "test-sgtech-db"
 });
 
 export default con
