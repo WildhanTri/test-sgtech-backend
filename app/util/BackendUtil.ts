@@ -8,3 +8,10 @@ export const getPageCount = (rowCount: number, offset: number) => {
     console.log(offset)
     return Math.round((rowCount / offset) + 1)
 }
+
+export const convertISODateToYYYYMMDD = (date: any) => {
+    var newDate = new Date(date);
+    var stringNewDate = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();//prints expected format.
+    console.log(stringNewDate)
+    return stringNewDate
+}

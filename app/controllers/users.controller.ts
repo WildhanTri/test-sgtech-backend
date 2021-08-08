@@ -4,6 +4,7 @@ import debug from 'debug';
 import { objectResponse } from '../response/responses'
 import { UsersDto } from '../model/users.model';
 import { v4 as uuidv4 } from 'uuid';
+import { convertISODateToYYYYMMDD } from '../util/BackendUtil';
 
 const log: debug.IDebugger = debug('app:users-controller');
 class UsersController {
@@ -53,6 +54,29 @@ class UsersController {
         } else {
             res.status(401).send(objectResponse(user, null));
         }
+    }
+
+    async updateProfile(req: express.Request, res: express.Response) {
+        var uuidUser = req.body.user.user_uuid
+        var existUser = await usersService.getDetail(uuidUser)
+        console.log(JSON.stringify(existUser))
+        var user: UsersDto = {
+            user_uuid: uuidUser,
+            user_first_name: req.body.user_first_name != null ? req.body.user_first_name : existUser.user_first_name,
+            user_last_name: req.body.user_last_name != null ? req.body.user_last_name : existUser.user_last_name,
+            user_email: req.body.user_email != null ? req.body.user_email : existUser.user_email,
+            user_birthday: req.body.user_birthday != null ? req.body.user_birthday : convertISODateToYYYYMMDD(existUser.user_birthday),
+            user_gender: req.body.user_gender != null ? req.body.user_gender : existUser.user_gender
+        }
+        
+        await usersService.update(user)
+
+        if (user != null) {
+            res.status(200).send(objectResponse("berhasil", user));
+        } else {
+            res.status(401).send(objectResponse("gagal", null));
+        }
+        
     }
 
     async get(req: express.Request, res: express.Response) {

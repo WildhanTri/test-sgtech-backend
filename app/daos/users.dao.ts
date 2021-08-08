@@ -56,11 +56,8 @@ class UsersDao {
     // CRUD
     async getDetail(user_uuid: string) {
         const mysql = require('mysql2/promise');
-        console.log(1)
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
 
-        console.log(2)
-        console.log(user_uuid)
         var ps = []
         var sql = "SELECT * FROM users WHERE user_uuid = ? "
         ps.push(user_uuid)
@@ -101,12 +98,14 @@ class UsersDao {
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
 
         var ps = []
-        var sql = "INSERT INTO `users` (`user_uuid`, `user_first_name`, `user_last_name`, `user_email`, `user_password`) VALUES (?, ?, ?, ?, ?);"
+        var sql = "INSERT INTO `users` (`user_uuid`, `user_first_name`, `user_last_name`, `user_email`, `user_password`, `user_birthday`, `user_gender`) VALUES (?, ?, ?, ?, ? ?, ?);"
         ps.push(user.user_uuid)
         ps.push(user.user_first_name)
         ps.push(user.user_last_name)
         ps.push(user.user_email)
         ps.push(user.user_password)
+        ps.push(user.user_birthday)
+        ps.push(user.user_gender)
 
         await connection.execute(sql, ps);
         return
@@ -117,13 +116,14 @@ class UsersDao {
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
 
         var ps = []
-        var sql = "UPDATE users SET user_email = ?, user_first_name = ?, user_last_name = ?, user_password = ?, user_token = ?  WHERE user_uuid = ? "
+        var sql = "UPDATE users SET user_email = ?, user_first_name = ?, user_last_name = ?, user_birthday = ?, user_gender = ?  WHERE user_uuid = ? "
         ps.push(user.user_email)
         ps.push(user.user_first_name)
         ps.push(user.user_last_name)
-        ps.push(user.user_password)
-        ps.push(user.user_token)
+        ps.push(user.user_birthday)
+        ps.push(user.user_gender)
         ps.push(user.user_uuid)
+
 
         await connection.execute(sql, ps);
         return
