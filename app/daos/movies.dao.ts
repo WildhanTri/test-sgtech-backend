@@ -3,6 +3,7 @@ import shortid from "shortid";
 import debug from 'debug';
 import connection from '../../conn';
 import { MoviesDTO } from "../model/movies.model";
+import { HomeRowDto } from "../model/homeRow.model";
 
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
@@ -75,6 +76,31 @@ class MoviesDao {
         return data
     }
 
+    async getHomeRow(): Promise<HomeRowDto[]> {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+
+        var sql = "SELECT * FROM home_rows hr "
+
+        const [rows, fields] = await connection.execute(sql);
+        var data = JSON.parse(JSON.stringify(rows))
+        return data.map((da: any) => HomeRowDto.fromObject(da))
+    }
+
+    async getHomeRowMovies(home_row_uuid: string): Promise<MoviesDTO[]> {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+
+        var ps = []
+        var sql = " SELECT m.* FROM home_rows hr INNER JOIN movies_tags mt ON mt.movie_tag_name = hr.home_row_tags INNER JOIN movies m ON m.movie_id = mt.movie_tag_movie_id WHERE hr.home_row_uuid = ? "
+        ps.push(home_row_uuid)
+
+        const [rows, fields] = await connection.execute(sql, ps);
+        var data = JSON.parse(JSON.stringify(rows))
+        return data.map((da: any) => MoviesDTO.fromObject(da))
+    }
+
+
     async create(movie: MoviesDTO) {
         const mysql = require('mysql2/promise');
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
@@ -137,7 +163,7 @@ class MoviesDao {
         var sql = "SELECT COUNT(*) as count FROM users u INNER JOIN users_libraries ul ON u.user_id = ul.user_library_user_id INNER JOIN movies m ON m.movie_id = ul.user_library_movie_id WHERE u.user_uuid = ? AND m.movie_uuid = ?"
         ps.push(uuidUser)
         ps.push(uuidMovie)
-        
+
 
         const [rows, fields] = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))

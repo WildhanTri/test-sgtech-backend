@@ -40,13 +40,27 @@ class MoviesController {
         }
     }
 
+    async getHomeRow(req: express.Request, res: express.Response) {
+
+        const home_row = await moviesService.getHomeRow()
+        res.status(200).send(objectResponse("Berhasil", home_row));
+
+    }
+
+    async getHomeRowMovies(req: express.Request, res: express.Response) {
+        var uuid = req.params.home_row_uuid
+        const home_row = await moviesService.getHomeRowMovies(uuid)
+        res.status(200).send(objectResponse("Berhasil", home_row));
+
+    }
+
     async buyMovie(req: express.Request, res: express.Response) {
         var movie_uuid = req.params.movie_uuid
         var user_uuid = req.body.user.user_uuid
 
         var checkMovieByUser = await moviesService.checkMovieByUser(movie_uuid, user_uuid)
         console.log(checkMovieByUser + " <= aodkwoakdoaskodiwhjsoij")
-        if(checkMovieByUser){
+        if (checkMovieByUser) {
             res.status(500).send(objectResponse("Movie sudah pernah dibeli"));
             return
         }

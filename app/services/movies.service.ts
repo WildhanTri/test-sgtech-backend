@@ -29,6 +29,14 @@ class MoviesService {
         return await moviesDao.getDetail(movie_uuid)
     }
 
+    async getHomeRow() {
+        return await moviesDao.getHomeRow()
+    }
+
+    async getHomeRowMovies(home_row_uuid:string) {
+        return await moviesDao.getHomeRowMovies(home_row_uuid)
+    }
+
     async checkMovieByUser(movie_uuid: string, user_uuid: string) {
         var count: any = await moviesDao.checkMovieByUser(movie_uuid, user_uuid)
         console.log("awokwaokawokwa => "+count)

@@ -33,6 +33,13 @@ export class AppRoutes extends CommonRoutesConfig {
         this.app.route(`/v1/movie/:movie_uuid/buy`)
             .post(usersMiddleware.validateToken, moviesController.buyMovie)
 
+
+        // HOME
+        this.app.route(`/v1/home`)
+            .get(usersMiddleware.validateToken, moviesController.getHomeRow)
+        this.app.route(`/v1/home/:home_row_uuid`)
+            .get(usersMiddleware.validateToken, moviesController.getHomeRowMovies)
+
         // USER MEMBERSHIP
         this.app.route(`/v1/membership/start`)
             .post(usersMiddleware.validateToken, usersMembershipController.start)
