@@ -53,6 +53,29 @@ class UsersDao {
         return data[0]
     }
 
+    async validateOldPassword(user_uuid: string, user_password: string) {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const [rows, fields] = await connection.execute('SELECT COUNT(*) as count FROM users WHERE user_uuid = ? AND user_password = ?', [user_uuid, user_password]);
+
+        var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        return data
+    }
+
+    async updateNewPassword(user_uuid: string, user_password: string) {
+        const mysql = require('mysql2/promise');
+        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+
+        var ps = []
+        var sql = "UPDATE users SET user_password = ?  WHERE user_uuid = ? "
+        ps.push(user_password)
+        ps.push(user_uuid)
+
+
+        await connection.execute(sql, ps);
+        return
+    }
+
     // CRUD
     async getDetail(user_uuid: string) {
         const mysql = require('mysql2/promise');
@@ -72,7 +95,7 @@ class UsersDao {
 
     async get(query: string, from: number, offset: number) {
         const mysql = require('mysql2/promise');
-        
+
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
 
         var ps = []

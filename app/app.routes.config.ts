@@ -15,12 +15,15 @@ export class AppRoutes extends CommonRoutesConfig {
         // USER
         this.app.route(`/v1/user/profile`)
             .get(usersMiddleware.validateToken, usersController.getProfile)
-        this.app.route(`/v1/user/profile`)
             .patch(usersMiddleware.validateToken, usersController.updateProfile)
+        this.app.route(`/v1/user/editPassword`)
+            .patch(usersMiddleware.validateToken, usersController.editPassword)
         this.app.route(`/v1/user/login`)
             .post(usersController.login)
         this.app.route(`/v1/user/registration`)
             .post(usersController.registration)
+        this.app.route(`/v1/user/forgotPassword`)
+            .patch(usersController.forgotPassword)
 
         // MOVIE
         this.app.route(`/v1/movie`)
@@ -35,10 +38,10 @@ export class AppRoutes extends CommonRoutesConfig {
             .post(usersMiddleware.validateToken, usersMembershipController.start)
         this.app.route(`/v1/membership/cancel`)
             .delete(usersMiddleware.validateToken, usersMembershipController.cancel)
-            
+
         // USER LIBRARY
         this.app.route(`/v1/library`)
-        .get(usersMiddleware.validateToken, usersLibraryController.get)
+            .get(usersMiddleware.validateToken, usersLibraryController.get)
 
         return this.app;
     }

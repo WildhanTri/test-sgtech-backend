@@ -56,6 +56,10 @@ class UsersService {
         return await usersDao.getDetail(user_uuid)
     }
 
+    async getByEmail(user_email: string) {
+        return await usersDao.getUserByEmail(user_email)
+    }
+
     async create(user: UsersDto) {
         return await usersDao.create(user)
     }
@@ -71,6 +75,15 @@ class UsersService {
     async validateToken(token: string) {
         var checkToken = await UsersDao.validateToken(token);
         return checkToken
+    }
+
+    async validateOldPassword(user_uuid: string, user_password: string) {
+        var checkOldPassword = await UsersDao.validateOldPassword(user_uuid, user_password);
+        return checkOldPassword > 0 ? true : false
+    }
+
+    async updateNewPassword(user_uuid: string, user_password: string) {
+        return await UsersDao.updateNewPassword(user_uuid, user_password);
     }
 }
 

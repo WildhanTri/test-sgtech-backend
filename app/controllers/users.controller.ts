@@ -68,15 +68,50 @@ class UsersController {
             user_birthday: req.body.user_birthday != null ? req.body.user_birthday : convertISODateToYYYYMMDD(existUser.user_birthday),
             user_gender: req.body.user_gender != null ? req.body.user_gender : existUser.user_gender
         }
-        
+
         await usersService.update(user)
 
         if (user != null) {
             res.status(200).send(objectResponse("berhasil", user));
         } else {
-            res.status(401).send(objectResponse("gagal", null));
+            res.status(401).send(objectResponse("gagal"));
         }
-        
+    }
+
+    async editPassword(req: express.Request, res: express.Response) {
+        var uuidUser = req.body.user.user_uuid
+
+        var old_password = req.body.old_password
+        var new_password = req.body.new_password
+
+        var validate_old_password = await usersService.validateOldPassword(uuidUser, old_password)
+        if (!validate_old_password) {
+            res.status(500).send(objectResponse("Password lama tidak sesuai"));
+            return
+        }
+
+        await usersService.updateNewPassword(uuidUser, new_password)
+        res.status(200).send(objectResponse("berhasil"));
+    }
+
+    async forgotPassword(req: express.Request, res: express.Response) {
+        var user_email = req.body.user_email
+        var user_password = req.body.user_password
+        var user_password_confirm = req.body.user_password_confirm
+
+        var user = await usersService.getByEmail(user_email)
+        if (user == null) {
+            res.status(500).send(objectResponse("Email tidak ditemukan"));
+            return
+        }
+
+        if (user_password != user_password_confirm) {
+            res.status(500).send(objectResponse("Konfirmasi password tidak sesuai"));
+            return
+        }
+
+        await usersService.updateNewPassword(user.user_uuid, user_password)
+        res.status(200).send(objectResponse("berhasil"));
     }
 
     async get(req: express.Request, res: express.Response) {
