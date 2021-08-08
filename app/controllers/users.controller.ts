@@ -45,6 +45,16 @@ class UsersController {
         }
     }
 
+    async getProfile(req: express.Request, res: express.Response) {
+        var user = req.body.user
+        user = UsersDto.fromObject(user)
+        if (user != null) {
+            res.status(200).send(objectResponse(user, null));
+        } else {
+            res.status(401).send(objectResponse(user, null));
+        }
+    }
+
     async get(req: express.Request, res: express.Response) {
         var query = req.query.q ? req.query.q.toString() : ""
         var page = req.query.page ? Number(req.query.page) : 1

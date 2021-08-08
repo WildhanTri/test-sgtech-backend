@@ -11,6 +11,8 @@ export class AppRoutes extends CommonRoutesConfig {
 
     configureRoutes() {
         // USER
+        this.app.route(`/v1/user/profile`)
+            .get(usersMiddleware.validateToken, usersController.getProfile)
         this.app.route(`/v1/user/login`)
             .post(usersController.login)
         this.app.route(`/v1/user/registration`)
