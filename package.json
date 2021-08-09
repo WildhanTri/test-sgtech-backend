@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "test-sgtech-backend",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "tsc && nodemon ./dist/app.js",
     "debug": "export DEBUG=* && npm start",
