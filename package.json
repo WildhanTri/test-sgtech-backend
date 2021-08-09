@@ -2,15 +2,14 @@
   "name": "test-sgtech-backend",
   "version": "0.0.1",
   "description": "test-sgtech-backend",
-  "main": "index.js",
   "engines": {
     "node": "16.x"
   },
+  "main": "index.js",
   "scripts": {
     "start": "tsc && nodemon ./dist/app.js",
     "debug": "export DEBUG=* && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "tsc"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "REST",
