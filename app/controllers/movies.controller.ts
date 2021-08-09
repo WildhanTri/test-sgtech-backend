@@ -17,11 +17,12 @@ class MoviesController {
     }
 
     async get(req: express.Request, res: express.Response) {
+        var user_uuid = req.body.user.user_uuid
         var query = req.query.q ? req.query.q.toString() : ""
         var page = req.query.page ? Number(req.query.page) : 1
         var offset = req.query.page ? Number(req.query.offset) : 1000
 
-        const movies = await moviesService.get(query, page, offset)
+        const movies = await moviesService.get(user_uuid,query, page, offset)
         const row_count = await moviesService.count(query)
         if (movies != null) {
             res.status(200).send(pagingResponse("Berhasil", movies, page, offset, getPageCount(row_count, offset), row_count));
@@ -31,8 +32,9 @@ class MoviesController {
     }
 
     async getDetail(req: express.Request, res: express.Response) {
+        var user_uuid = req.body.user.user_uuid
         var uuid = req.params.movie_uuid
-        const movies = await moviesService.getDetail(uuid)
+        const movies = await moviesService.getDetail(user_uuid, uuid)
         if (movies != null) {
             res.status(200).send(objectResponse("Berhasil", movies));
         } else {

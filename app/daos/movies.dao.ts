@@ -23,13 +23,14 @@ class MoviesDao {
     }
 
     // CRUD
-    async getDetail(movie_uuid: string) {
+    async getDetail(user_uuid: string, movie_uuid: string) {
         const mysql = require('mysql2/promise');
         const connection = await conn;
 
         var ps = []
-        var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE m.movie_uuid = ?"
+        var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name, (SELECT count(*) > 0 FROM users_libraries INNER JOIN users ON users_libraries.user_library_user_id = users.user_id INNER JOIN movies ON movies.movie_id = users_libraries.user_library_movie_id WHERE users.user_uuid = ? AND movies.movie_id = m.movie_id ) as movie_is_bought FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE m.movie_uuid = ?"
 
+        ps.push(user_uuid)
         ps.push(movie_uuid)
 
         const [rows, fields] = await connection.execute(sql, ps);
@@ -40,12 +41,14 @@ class MoviesDao {
         return MoviesDTO.fromObject(data[0])
     }
 
-    async getList(query: string, from: number, offset: number): Promise<MoviesDTO[]> {
+    async getList(user_uuid: string, query: string, from: number, offset: number): Promise<MoviesDTO[]> {
         const mysql = require('mysql2/promise');
         const connection = await conn;
 
         var ps = []
-        var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE 1=1 "
+        var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name, (SELECT count(*) > 0 FROM users_libraries INNER JOIN users ON users_libraries.user_library_user_id = users.user_id INNER JOIN movies ON movies.movie_id = users_libraries.user_library_movie_id WHERE users.user_uuid = ? AND movies.movie_id = m.movie_id ) as movie_is_bought FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE 1=1 "
+        ps.push(user_uuid)
+
         if (query) {
             sql += " AND m.movie_title LIKE ?  "
             ps.push(`%${query}%`);

@@ -13,11 +13,11 @@ class MoviesService {
         return MoviesService.instance;
     }
 
-    async get(query: string, page: number, offset: number) {
+    async get(user_uuid: string, query: string, page: number, offset: number) {
         var query = query
         var from = getFromByPage(page, offset)
         var offset = offset
-        return await moviesDao.getList(query, from, offset)
+        return await moviesDao.getList(user_uuid, query, from, offset)
     }
 
     async count(query: string) {
@@ -25,21 +25,21 @@ class MoviesService {
         return await moviesDao.countList(query)
     }
 
-    async getDetail(movie_uuid: string) {
-        return await moviesDao.getDetail(movie_uuid)
+    async getDetail(user_uuid: string, movie_uuid: string) {
+        return await moviesDao.getDetail(user_uuid, movie_uuid)
     }
 
     async getHomeRow() {
         return await moviesDao.getHomeRow()
     }
 
-    async getHomeRowMovies(home_row_uuid:string) {
+    async getHomeRowMovies(home_row_uuid: string) {
         return await moviesDao.getHomeRowMovies(home_row_uuid)
     }
 
     async checkMovieByUser(movie_uuid: string, user_uuid: string) {
         var count: any = await moviesDao.checkMovieByUser(movie_uuid, user_uuid)
-        console.log("awokwaokawokwa => "+count)
+        console.log("awokwaokawokwa => " + count)
         return count > 0
     }
 
