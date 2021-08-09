@@ -1,3 +1,5 @@
+import { convertISODateToYYYYMMDD } from "../util/BackendUtil"
+
 export class UsersDto {
    user_id?: string
    user_uuid?: string
@@ -22,7 +24,7 @@ export class UsersDto {
       this.user_birthday = user_birthday
       this.user_gender = user_gender
       this.user_membership_status = user_membership_status
-      this.user_membership_latest_date = user_membership_latest_date
+      this.user_membership_latest_date = convertISODateToYYYYMMDD(user_membership_latest_date)
    }
 
    static fromObject(obj: any) {

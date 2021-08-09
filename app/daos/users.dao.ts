@@ -45,7 +45,7 @@ class UsersDao {
     async validateToken(token: string) {
         const mysql = require('mysql2/promise');
         const connection = await conn;
-        const [rows, fields] = await connection.execute('SELECT * FROM users WHERE user_token = ?', [token]);
+        const [rows, fields] = await connection.execute('SELECT u.*, (SELECT max(user_membership_end_date) FROM users_memberships WHERE user_membership_user_id = u.user_id) as user_membership_latest_date FROM users u WHERE user_token = ?', [token]);
         var data = JSON.parse(JSON.stringify(rows))
         if (data.length == 0) {
             return null
