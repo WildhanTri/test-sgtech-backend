@@ -1,7 +1,7 @@
 import { UsersDto } from "../model/users.model";
 import shortid from "shortid";
 import debug from 'debug';
-import connection from '../../conn';
+import connection, { conn } from '../../conn';
 import { MoviesDTO } from "../model/movies.model";
 import { HomeRowDto } from "../model/homeRow.model";
 
@@ -25,7 +25,7 @@ class MoviesDao {
     // CRUD
     async getDetail(movie_uuid: string) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE m.movie_uuid = ?"
@@ -42,7 +42,7 @@ class MoviesDao {
 
     async getList(query: string, from: number, offset: number): Promise<MoviesDTO[]> {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "SELECT m.*, mt.movie_type_uuid, mt.movie_type_name, mc.movie_classification_uuid, mc.movie_classification_name FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE 1=1 "
@@ -62,7 +62,7 @@ class MoviesDao {
 
     async countList(query: string) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "SELECT COUNT(*) as count FROM movies m INNER JOIN movies_type mt ON mt.movie_type_id = m.movie_type_id INNER JOIN movies_classification mc ON mc.movie_classification_id = m.movie_classification_id WHERE 1=1 "
@@ -71,14 +71,14 @@ class MoviesDao {
             ps.push(`%${query}%`);
         }
 
-        const [rows, fields] = await connection.execute(sql, ps);
+        const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
         return data
     }
 
     async getHomeRow(): Promise<HomeRowDto[]> {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var sql = "SELECT * FROM home_rows hr "
 
@@ -89,7 +89,7 @@ class MoviesDao {
 
     async getHomeRowMovies(home_row_uuid: string): Promise<MoviesDTO[]> {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = " SELECT m.* FROM home_rows hr INNER JOIN movies_tags mt ON mt.movie_tag_name = hr.home_row_tags INNER JOIN movies m ON m.movie_id = mt.movie_tag_movie_id WHERE hr.home_row_uuid = ? "
@@ -103,7 +103,7 @@ class MoviesDao {
 
     async create(movie: MoviesDTO) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "INSERT INTO `test-sgtech-db`.`movies`(`movie_uuid`, `movie_title`, `movie_synopsis`, `movie_type_id`, `movie_classification_id`, `movie_price`, `movie_is_subscription_availability`, `movie_thumbnail_vertical_url`, `movie_thumbnail_horizontal_url`, `movie_year`) VALUES ( ?, ?, ?, (SELECT id FROM movies_type WHERE uuid = ?), (SELECT id FROM movies_classification WHERE uuid = ? ), ?, ?, ?, ?, ?); "
@@ -124,7 +124,7 @@ class MoviesDao {
 
     async update(movie: MoviesDTO) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "UPDATE `test-sgtech-db`.`movies` SET `movie_title` = ?, `movie_synopsis` = ?, `movie_type_id` = ?, `movie_classification_id` = ?,  `movie_price` = ?, `movie_is_subscription_availability` = ?, `movie_thumbnail_vertical_url` = ?, `movie_thumbnail_horizontal_url` = ?, `movie_year` = ? WHERE `movie_uuid` = ?;"
@@ -145,7 +145,7 @@ class MoviesDao {
 
     async delete(moive_uuid: string) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "DELETE FROM movie WHERE movie_uuid = ? "
@@ -157,7 +157,7 @@ class MoviesDao {
 
     async checkMovieByUser(uuidMovie: string, uuidUser: string) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "SELECT COUNT(*) as count FROM users u INNER JOIN users_libraries ul ON u.user_id = ul.user_library_user_id INNER JOIN movies m ON m.movie_id = ul.user_library_movie_id WHERE u.user_uuid = ? AND m.movie_uuid = ?"
@@ -165,14 +165,14 @@ class MoviesDao {
         ps.push(uuidMovie)
 
 
-        const [rows, fields] = await connection.execute(sql, ps);
+        const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
         return data
     }
 
     async buyMovie(uuidMovie: string, uuidUser: string) {
         const mysql = require('mysql2/promise');
-        const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
+        const connection = await conn;
 
         var ps = []
         var sql = "INSERT INTO `test-sgtech-db`.`users_libraries`(`user_library_movie_id`, `user_library_user_id`,  `user_library_movie_price`) VALUES ((SELECT movie_id uuid FROM movies WHERE movie_uuid = ?), (SELECT user_id FROM users WHERE user_uuid = ?), (SELECT movie_price uuid FROM movies WHERE movie_uuid = ?)); "

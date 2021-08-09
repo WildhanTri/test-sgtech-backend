@@ -1,10 +1,5 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "test-sgtech-db"
-});
+export const conn = mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' })
 
-export default con
+export default conn
