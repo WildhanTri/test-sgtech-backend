@@ -20,7 +20,6 @@ class UsersController {
     async login(req: express.Request, res: express.Response) {
         const users = await usersService.login(req.body.user_email, req.body.user_password)
         if (users.message == "Login berhasil") {
-            res.status(200).send(objectResponse(users.message, users.object));
         } else {
             res.status(401).send(objectResponse(users.message, users.object));
         }
@@ -33,13 +32,15 @@ class UsersController {
             user_email: req.body.user_email,
             user_first_name: req.body.user_first_name,
             user_last_name: req.body.user_last_name,
-            user_password: req.body.user_password
+            user_password: req.body.user_password,
+            user_birthday: req.body.user_birthday,
+            user_gender: req.body.user_gender
         }
 
         const resp = await usersService.registration(users)
 
         console.log(users)
-        if (resp.message == "Login berhasil") {
+        if (resp.message == "Registrasi berhasil") {
             res.status(200).send(objectResponse(resp.message, resp.object));
         } else {
             res.status(401).send(objectResponse(resp.message, resp.object));
@@ -48,11 +49,12 @@ class UsersController {
 
     async getProfile(req: express.Request, res: express.Response) {
         var user = req.body.user
+        console.log("ini user => " + user)
         user = UsersDto.fromObject(user)
         if (user != null) {
-            res.status(200).send(objectResponse(user, null));
+            res.status(200).send(objectResponse("berhasil", user));
         } else {
-            res.status(401).send(objectResponse(user, null));
+            res.status(401).send(objectResponse("gagal"));
         }
     }
 

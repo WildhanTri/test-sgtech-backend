@@ -121,7 +121,7 @@ class UsersDao {
         const connection = await mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' });
 
         var ps = []
-        var sql = "INSERT INTO `users` (`user_uuid`, `user_first_name`, `user_last_name`, `user_email`, `user_password`, `user_birthday`, `user_gender`) VALUES (?, ?, ?, ?, ? ?, ?);"
+        var sql = "INSERT INTO `users` (`user_uuid`, `user_first_name`, `user_last_name`, `user_email`, `user_password`, `user_birthday`, `user_gender`) VALUES (?, ?, ?, ?, ?, ?, ?);"
         ps.push(user.user_uuid)
         ps.push(user.user_first_name)
         ps.push(user.user_last_name)
@@ -129,6 +129,8 @@ class UsersDao {
         ps.push(user.user_password)
         ps.push(user.user_birthday)
         ps.push(user.user_gender)
+
+        console.log(JSON.stringify(user))
 
         await connection.execute(sql, ps);
         return
