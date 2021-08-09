@@ -20,6 +20,7 @@ class UsersController {
     async login(req: express.Request, res: express.Response) {
         const users = await usersService.login(req.body.user_email, req.body.user_password)
         if (users.message == "Login berhasil") {
+            res.status(200).send(objectResponse(users.message, users.object));
         } else {
             res.status(401).send(objectResponse(users.message, users.object));
         }
