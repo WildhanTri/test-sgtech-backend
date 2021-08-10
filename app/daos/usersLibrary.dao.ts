@@ -42,7 +42,9 @@ class UsersLibraryDao {
 
         const [rows, fields] = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows))
-        console.log("oawkowakowakdasoidhjasoid => " + JSON.stringify(data))
+        
+        await connection.end()
+
         return data.map((da: any) => MoviesDTO.fromObject(da))
     }
 
@@ -60,6 +62,7 @@ class UsersLibraryDao {
 
         const [rows, fields]:any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        await connection.end()
         return data
     }
 }

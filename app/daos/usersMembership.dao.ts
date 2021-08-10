@@ -34,6 +34,9 @@ class UsersMembershipDao {
 
         const [rows, fields] = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows))
+        
+        await connection.end()
+
         return data.map((da: any) => UsersMembershipDto.fromObject(da))
     }
 
@@ -47,6 +50,9 @@ class UsersMembershipDao {
 
         const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        
+        await connection.end()
+
         return data
     }
 
@@ -60,6 +66,9 @@ class UsersMembershipDao {
 
         const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        
+        await connection.end()
+
         return data
     }
 
@@ -73,6 +82,8 @@ class UsersMembershipDao {
 
         const [rows, fields]:any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        await connection.end()
+
         return data
     }
 
@@ -86,6 +97,9 @@ class UsersMembershipDao {
         ps.push(uuid_user)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
+
         return
     }
 
@@ -98,6 +112,9 @@ class UsersMembershipDao {
         ps.push(uuid_user)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
+        
         return
     }
 }

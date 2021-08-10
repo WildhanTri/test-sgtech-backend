@@ -28,6 +28,7 @@ class UsersDao {
         if (data.length == 0) {
             return null
         }
+        await connection.end()
         return data[0]
     }
 
@@ -39,6 +40,7 @@ class UsersDao {
         if (data.length == 0) {
             return null
         }
+        await connection.end()
         return data[0]
     }
 
@@ -50,6 +52,7 @@ class UsersDao {
         if (data.length == 0) {
             return null
         }
+        await connection.end()
         return data[0]
     }
 
@@ -59,6 +62,7 @@ class UsersDao {
         const [rows, fields]: any = await connection.execute('SELECT COUNT(*) as count FROM users WHERE user_uuid = ? AND user_password = ?', [user_uuid, user_password]);
 
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        await connection.end()
         return data
     }
 
@@ -73,6 +77,7 @@ class UsersDao {
 
 
         await connection.execute(sql, ps);
+        await connection.end()
         return
     }
 
@@ -90,6 +95,7 @@ class UsersDao {
         if (data.length == 0) {
             return null
         }
+        await connection.end()
         return data[0]
     }
 
@@ -111,8 +117,8 @@ class UsersDao {
         }
 
         const [rows, fields] = await connection.execute(sql, ps);
-        console.log(rows)
         var data = JSON.parse(JSON.stringify(rows))
+        connection.end()
         return data
     }
 
@@ -133,6 +139,7 @@ class UsersDao {
         console.log(JSON.stringify(user))
 
         await connection.execute(sql, ps);
+        await connection.end()
         return
     }
 
@@ -151,6 +158,7 @@ class UsersDao {
 
 
         await connection.execute(sql, ps);
+        await connection.end()
         return
     }
 
@@ -163,6 +171,7 @@ class UsersDao {
         ps.push(user_uuid)
 
         await connection.execute(sql, ps);
+        await connection.end()
         return
     }
 
@@ -176,6 +185,7 @@ class UsersDao {
         ps.push(uuid)
 
         await connection.execute(sql, ps);
+        await connection.end()
         return
     }
 }

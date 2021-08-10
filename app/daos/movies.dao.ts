@@ -38,6 +38,8 @@ class MoviesDao {
         if (data.length == 0) {
             return null
         }
+        
+        await connection.end()
         return MoviesDTO.fromObject(data[0])
     }
 
@@ -60,6 +62,8 @@ class MoviesDao {
 
         const [rows, fields] = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows))
+        
+        await connection.end()
         return data.map((da: any) => MoviesDTO.fromObject(da))
     }
 
@@ -76,6 +80,8 @@ class MoviesDao {
 
         const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        
+        await connection.end()
         return data
     }
 
@@ -87,6 +93,8 @@ class MoviesDao {
 
         const [rows, fields] = await connection.execute(sql);
         var data = JSON.parse(JSON.stringify(rows))
+        
+        await connection.end()
         return data.map((da: any) => HomeRowDto.fromObject(da))
     }
 
@@ -100,6 +108,8 @@ class MoviesDao {
 
         const [rows, fields] = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows))
+        
+        await connection.end()
         return data.map((da: any) => MoviesDTO.fromObject(da))
     }
 
@@ -122,6 +132,8 @@ class MoviesDao {
         ps.push(movie.movie_year)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
         return
     }
 
@@ -143,6 +155,8 @@ class MoviesDao {
         ps.push(movie.movie_uuid)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
         return
     }
 
@@ -155,6 +169,8 @@ class MoviesDao {
         ps.push(moive_uuid)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
         return
     }
 
@@ -170,6 +186,8 @@ class MoviesDao {
 
         const [rows, fields]: any = await connection.execute(sql, ps);
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
+        
+        await connection.end()
         return data
     }
 
@@ -184,6 +202,8 @@ class MoviesDao {
         ps.push(uuidMovie)
 
         await connection.execute(sql, ps);
+        
+        await connection.end()
         return
     }
 }
