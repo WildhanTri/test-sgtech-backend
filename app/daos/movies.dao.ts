@@ -38,7 +38,6 @@ class MoviesDao {
         if (data.length == 0) {
             return null
         }
-        connection.end()
         return MoviesDTO.fromObject(data[0])
     }
 
