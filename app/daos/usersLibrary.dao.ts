@@ -1,7 +1,7 @@
 
 import shortid from "shortid";
 import debug from 'debug';
-import connection, { conn } from '../../conn';
+import { conn, db } from '../../conn';
 import { UsersLibraryDto } from "../model/usersLibrary.model";
 import { MoviesDTO } from "../model/movies.model";
 
@@ -25,7 +25,7 @@ class UsersLibraryDao {
     // CRUD
     async getList(uuid_user: string, query:string, from: number, offset: number): Promise<UsersLibraryDto[]> {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "SELECT m.* FROM users_libraries ul INNER JOIN users u ON u.user_id = ul.user_library_user_id INNER JOIN movies m ON m.movie_id = ul.user_library_movie_id WHERE u.user_uuid = ? ";
@@ -48,7 +48,7 @@ class UsersLibraryDao {
 
     async countList(uuid_user: string, query:string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "SELECT COUNT(*) as count FROM users_libraries ul INNER JOIN users u ON u.user_id = ul.user_library_user_id INNER JOIN movies m ON m.movie_id = ul.user_library_movie_id WHERE u.user_uuid = ? "

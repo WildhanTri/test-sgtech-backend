@@ -1,7 +1,7 @@
 import { UsersDto } from "../model/users.model";
 import shortid from "shortid";
 import debug from 'debug';
-import connection, { conn } from '../../conn';
+import { conn, db } from '../../conn';
 
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
@@ -22,7 +22,7 @@ class UsersDao {
 
     async getUserByEmail(email: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
         const [rows, fields] = await connection.execute('SELECT * FROM users WHERE user_email = ?', [email]);
         var data = JSON.parse(JSON.stringify(rows))
         if (data.length == 0) {
@@ -33,7 +33,7 @@ class UsersDao {
 
     async getUserByEmailAndPassword(email: string, password: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
         const [rows, fields] = await connection.execute('SELECT * FROM users WHERE user_email = ? AND user_password = ?', [email, password]);
         var data = JSON.parse(JSON.stringify(rows))
         if (data.length == 0) {
@@ -44,7 +44,7 @@ class UsersDao {
 
     async validateToken(token: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
         const [rows, fields] = await connection.execute('SELECT u.*, (SELECT max(user_membership_end_date) FROM users_memberships WHERE user_membership_user_id = u.user_id) as user_membership_latest_date FROM users u WHERE user_token = ?', [token]);
         var data = JSON.parse(JSON.stringify(rows))
         if (data.length == 0) {
@@ -55,7 +55,7 @@ class UsersDao {
 
     async validateOldPassword(user_uuid: string, user_password: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
         const [rows, fields]: any = await connection.execute('SELECT COUNT(*) as count FROM users WHERE user_uuid = ? AND user_password = ?', [user_uuid, user_password]);
 
         var data = JSON.parse(JSON.stringify(rows[0]["count"]))
@@ -64,7 +64,7 @@ class UsersDao {
 
     async updateNewPassword(user_uuid: string, user_password: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "UPDATE users SET user_password = ?  WHERE user_uuid = ? "
@@ -79,7 +79,7 @@ class UsersDao {
     // CRUD
     async getDetail(user_uuid: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "SELECT * FROM users WHERE user_uuid = ? "
@@ -96,7 +96,7 @@ class UsersDao {
     async get(query: string, from: number, offset: number) {
         const mysql = require('mysql2/promise');
 
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "SELECT * FROM users WHERE 1=1 "
@@ -118,7 +118,7 @@ class UsersDao {
 
     async create(user: UsersDto) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "INSERT INTO `users` (`user_uuid`, `user_first_name`, `user_last_name`, `user_email`, `user_password`, `user_birthday`, `user_gender`) VALUES (?, ?, ?, ?, ?, ?, ?);"
@@ -138,7 +138,7 @@ class UsersDao {
 
     async update(user: UsersDto) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "UPDATE users SET user_email = ?, user_first_name = ?, user_last_name = ?, user_birthday = ?, user_gender = ?  WHERE user_uuid = ? "
@@ -156,7 +156,7 @@ class UsersDao {
 
     async delete(user_uuid: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "DELETE FROM users WHERE user_uuid = ? "
@@ -168,7 +168,7 @@ class UsersDao {
 
     async updateToken(uuid: string, token: string) {
         const mysql = require('mysql2/promise');
-        const connection = await conn;
+        const connection = await mysql.createConnection(db);
 
         var ps = []
         var sql = "UPDATE users SET user_token = ? WHERE user_uuid = ? "
