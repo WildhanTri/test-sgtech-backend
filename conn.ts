@@ -3,9 +3,9 @@ import mysql from 'mysql2/promise';
 // DEV
 // export const conn = mysql.createConnection({ host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' })
 // PROD
-export const conn = mysql.createConnection({ host: 'c8u4r7fp8i8qaniw.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', user: 'y1il3zodfwogi2n6', password: "duyr4pazfigk78is", database: 'ud8q5v4kdwoqcn4p' })
+export const conn = mysql.createConnection({ host: 'eu-cdbr-west-01.cleardb.com', user: 'b5b0b133ecb10e', password: "e8863f28", database: 'heroku_5bc85757d440e75' })
 
 // DEV
 // export const db = { host: 'localhost', user: 'root', password: "root", database: 'test-sgtech-db' }
 // PROD
-export const db = { host: 'c8u4r7fp8i8qaniw.chr7pe7iynqr.eu-west-1.rds.amazonaws.com', user: 'y1il3zodfwogi2n6', password: "duyr4pazfigk78is", database: 'ud8q5v4kdwoqcn4p' }
+export const db = { host: 'eu-cdbr-west-01.cleardb.com', user: 'b5b0b133ecb10e', password: "e8863f28", database: 'heroku_5bc85757d440e75' }
